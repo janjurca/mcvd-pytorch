@@ -15,11 +15,10 @@ from os import path
 class MeteoDataset(Dataset):
     FILE_APPEND = ".png"
     def __init__(self, data_dir, frames_per_sample=12, train=True, random_time=True, random_horizontal_flip=True,
-                 total_videos=-1, with_target=True, start_at=0):
+                 total_videos=-1, with_target=True, start_at=0, image_size=64):
         self.root = data_dir
         self.frames_per_sample = frames_per_sample
-        self.image_size_in = 64
-        self.image_size_out = 64
+        self.image_size = image_size
         
         tiles_dirs = glob.glob(path.join(self.root, "*"))
         tiles = {} 
@@ -82,13 +81,13 @@ class MeteoDataset(Dataset):
         for i, file in enumerate(sequence):
             with Image.open(file) as img:
                 img = img.convert("L")
-                img = img.resize((self.image_size_in,self.image_size_in))
+                img = img.resize((self.image_size,self.image_size))
                 img = transforms.ToTensor()(img)
                 query.append(img)
         query = torch.stack(query)
         if self.with_target:
             #target = query[-1]
-            #target = target.view(1, self.image_size_in, self.image_size_in)
+            #target = target.view(1, self.image_size, self.image_size)
             #target = target.repeat(self.frames_per_sample, 1, 1)
             return query, torch.tensor(1)
         return query

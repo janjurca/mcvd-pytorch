@@ -86,9 +86,9 @@ def get_dataset(data_path, config, video_frames_pred=0, start_at=0):
 
     elif config.data.dataset.upper() == 'METEO':
         dataset = MeteoDataset(data_path, frames_per_sample=config.data.num_frames_cond + getattr(config.data, "num_frames_future", 0) + video_frames_pred,
-                                 train=True, random_time=True, random_horizontal_flip=config.data.random_flip, start_at=start_at)
+                                 train=True, random_time=True, random_horizontal_flip=config.data.random_flip, start_at=start_at, image_size=config.data.image_size)
         test_dataset = MeteoDataset(data_path, frames_per_sample=config.data.num_frames_cond + getattr(config.data, "num_frames_future", 0) + video_frames_pred,
-                                    train=False, random_time=True, random_horizontal_flip=False, start_at=start_at)
+                                    train=False, random_time=True, random_horizontal_flip=False, start_at=start_at, image_size=config.data.image_size)
 
     elif config.data.dataset.upper() == 'LSUN':
         train_folder = '{}_train'.format(config.data.category)
