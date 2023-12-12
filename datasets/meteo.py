@@ -92,3 +92,19 @@ class MeteoDataset(Dataset):
             return query, torch.tensor(1)
         return query
 
+class LatentMeteoDataset(MeteoDataset):
+    FILE_APPEND = ".pt"
+    def __getitem__(self, index):
+        sequence = self.sequences[index]
+        query = []
+        
+        for i, file in enumerate(sequence):
+            z = torch.load(file).squeeze(0)
+            query.append(z)
+        query = torch.stack(query, dim=0)
+        if self.with_target:
+            #target = query[-1]
+            #target = target.view(1, self.image_size, self.image_size)
+            #target = target.repeat(self.frames_per_sample, 1, 1)
+            return query, torch.tensor(1)
+        return query
